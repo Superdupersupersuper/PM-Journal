@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, FolderKanban, LineChart } from "lucide-react";
+import { Calendar, FolderKanban, LineChart, LogOut } from "lucide-react";
 
 const NAV = [
   { href: "/calendar", label: "Calendar", icon: Calendar },
@@ -10,7 +10,7 @@ const NAV = [
   { href: "/accounts", label: "Accounts", icon: LineChart },
 ];
 
-export function Sidebar() {
+export function Sidebar({ userEmail }: { userEmail: string | null }) {
   const pathname = usePathname();
 
   return (
@@ -40,8 +40,21 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <div className="px-5 py-4 border-t border-border text-xs text-muted-foreground">
-        Phase 0 · scaffold
+      <div className="border-t border-border p-3 space-y-2">
+        {userEmail ? (
+          <div className="px-2 text-xs text-muted-foreground truncate" title={userEmail}>
+            {userEmail}
+          </div>
+        ) : null}
+        <form action="/auth/signout" method="post">
+          <button
+            type="submit"
+            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-muted hover:text-foreground"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </form>
       </div>
     </aside>
   );
